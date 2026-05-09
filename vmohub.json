@@ -1,0 +1,25 @@
+{
+  "VMOHUB": {
+    "Cloud Account": {
+      "dev": "https://cloud.apple.com/accounts/6731a0db7043ba7fe22367ba/resources/compute/instances",
+      "test": "https://cloud.apple.com/accounts/6731b62ead232b4cd4a29c25/resources/compute/instances",
+      "prod": "https://cloud.apple.com/accounts/6731b8347043ba7fe22367d1/resources/compute/instances"
+    },
+    "Chorus": {
+      "System Details": ""
+    },
+    "Quip": {
+      "Dashboard": ""
+    },
+    "Rio Build": {
+      "Dev": "",
+      "IT": ""
+    },
+    "GSLB": {
+      "filters": ""
+    },
+    "Git Repos": {
+      "Dev": ""
+    }
+  }
+}

@@ -1,0 +1,3 @@
+FROM docker-upstream.apple.com/library/httpd:latest
+
+COPY ./cms_webapp /usr/local/apache2/htdocs/

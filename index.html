@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSE Suite Portal</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="container-fluid">
+    <!-- Sidebar -->
+    <div id="mySidebar" class="sidebar">
+      <a class="closebtn" id="closeNav" type="button">close</a>
+      <h5 class="sidebar-title">CSE SUITE</h5>
+      <div class="custom-accordion text-left" id="mainAccordionContainer">
+        <div id="acesApplicationsContainer">Loading ACES...</div>
+        <div id="fasApplicationsContainer">Loading FAS...</div>
+        <div id="vmoeApplicationsContainer">Loading VMOE...</div>
+
+        <div class="accordion-group">
+          <div class="accordion-header">
+            <h5 class="mb-0">
+              <button class="custom-accordion-button" type="button" data-target="#commonLinks">
+                COMMON LINKS
+              </button>
+            </h5>
+          </div>
+          <div id="commonLinks" class="accordion-content">
+            <div class="accordion-body">
+              <a href="#" target="_blank">General Link 1</a><br />
+              <a href="#" target="_blank">General Link 2</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main" class="main">
+      <!-- Header -->
+      <div class="main-header">
+        <button class="openbtn" id="openNav">
+          <span class="icon">☰</span> <span class="text">MENU</span>
+        </button>
+        <h2 class="main-title">CORPORATE SYSTEMS ENGINEERING</h2>
+        <span class="company-name" id="appleIncText">Apple Inc.</span>
+      </div>
+
+      <!-- About Section -->
+      <div class="about-banner">
+        <div class="about-title">About this Portal</div>
+        <div class="about-description">
+         This portal provides centralized access to applications, tools, and links across the CMS suite.
+        </div>
+      </div>
+
+     
+
+      <!-- Background Logo -->
+      <div class="bg">
+        <img src="images/Icon-Mac.png" alt="Apple Logo" class="apple-logo" />
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-support">
+  For assistance or to report bugs, contact:<br />
+  <a href="mailto:corpsys-devops-cms@group.apple.com">corpsys-devops-cms@group.apple.com</a> 
+</div>
+
+  <script src="js/custom.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      function loadHTML(url, elementId) {
+        fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const container = document.getElementById(elementId);
+            container.innerHTML = html;
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            temp.querySelectorAll('script').forEach(script => {
+              const s = document.createElement('script');
+              if (script.src) s.src = script.src;
+              else s.textContent = script.textContent;
+              document.body.appendChild(s);
+            });
+          });
+      }
+
+      loadHTML('CMS-SUITE/aces-applications.html', 'acesApplicationsContainer');
+      loadHTML('CMS-SUITE/fas-applications.html', 'fasApplicationsContainer');
+      loadHTML('CMS-SUITE/vmoe-applications.html', 'vmoeApplicationsContainer');
+    });
+  </script>
+</body>
+</html>
