@@ -171,5 +171,3 @@ Done! It will now load automatically into the accordion UI.
 
 ## For assistance, please reach out to:
 
-- corpsys-devops-cms@group.apple.com
-- gunti_venkata_sumath@apple.com
