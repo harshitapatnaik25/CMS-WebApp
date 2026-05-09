@@ -1,9 +1,9 @@
 {
   "BANJO": {
     "Cloud Account": {
-      "dev": "https://cloud.apple.com/accounts/640ea8c60db6234fad416148/resources/compute/instances",
-      "test": "https://cloud.apple.com/accounts/640eab768a56cf6749e1ef41/resources/compute/instances",
-      "prod": "https://cloud.apple.com/accounts/643cd673251e0b394bbfecaf/resources/compute/instances"
+      "dev": "cloud_account_link",
+      "test": " ",
+      "prod": " "
     },
     "Chorus": {
       "System Details": ""
