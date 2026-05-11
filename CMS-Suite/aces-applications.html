@@ -1,0 +1,157 @@
+<!-- CMS-SUITE/aces-applications.html -->
+<div class="accordion-group">
+  <div class="accordion-header" id="headingACES">
+    <h5 class="mb-0">
+      <button class="custom-accordion-button" type="button" data-target="#collapseACES">
+        ACES APPLICATIONS
+      </button>
+    </h5>
+  </div>
+  <div id="collapseACES" class="accordion-content">
+    <div class="accordion-body">
+      <div class="custom-accordion">
+        <!-- JSON containers for each app -->
+        <div id="aces_linksJsonContainer"></div>
+        <div id="aceshubJsonContainer"></div>
+        <div id="appletravelJsonContainer"></div>
+        <div id="appletravel_adminJsonContainer"></div>
+        <div id="appletravel_externalJsonContainer"></div>
+        <div id="awardsstoreJsonContainer"></div>
+        <div id="bartJsonContainer"></div>
+        <div id="capsJsonContainer"></div>
+        <div id="cognitoaiJsonContainer"></div>
+        <div id="corpcardJsonContainer"></div>
+        <div id="eapprovalJsonContainer"></div>
+        <div id="hr_sites_people_JsonContainer"></div>
+        <div id="hrcmsJsonContainer"></div>
+        <div id="istwebJsonContainer"></div>
+        <div id="myfocusJsonContainer"></div>
+        <div id="pricecatJsonContainer"></div>
+        <div id="workstoreJsonContainer"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const acesApps = [
+    { file: 'aces_links', key: 'ACES LINKS' },
+    { file: 'aceshub', key: 'ACESHUB' },
+    { file: 'appletravel', key: 'APPLETRAVEL' },
+    { file: 'appletravel_admin', key: 'APPLETRAVEL ADMIN' },
+    { file: 'appletravel_external', key: 'APPLETRAVEL EXTERNAL' },
+    { file: 'awardsstore', key: 'AWARDSSTORE' },
+    { file: 'bart', key: 'BART' },
+    { file: 'caps', key: 'CAPS' },
+    { file: 'cognitoai', key: 'COGNITOAI' },
+    { file: 'corpcard', key: 'CORPCARD' },
+    { file: 'eapproval', key: 'EAPPROVAL' },
+    { file: 'hr_sites(people)', key: 'HR SITES(People)' },
+    { file: 'hrcms', key: 'HRCMS' },
+    { file: 'istweb', key: 'ISTWeb' },
+    { file: 'myfocus', key: 'MYFOCUS' },
+    { file: 'pricecat', key: 'PRICECAT' },
+    { file: 'workstore', key: 'WORKSTORE' }
+  ];
+
+  acesApps.forEach(({ file, key }) => {
+    const containerId = `${file.replace(/[^\w]/g, '_')}JsonContainer`;
+    loadJsonAccordion({
+      url: `ACES/${file}.json`,
+      containerId,
+      rootKey: key
+    });
+  });
+
+  if (typeof initializeAccordionListeners === 'function') {
+    initializeAccordionListeners();
+  }
+
+  function generateUniqueId(base = "section") {
+    return base + "_" + Math.random().toString(36).substr(2, 9);
+  }
+
+  window.loadJsonAccordion = function ({ url, containerId, rootKey }) {
+    const parent = document.getElementById(containerId);
+    if (!parent) return;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        const appData = data[rootKey];
+        if (!appData) {
+          parent.innerHTML = `<div class="error">❌ Key "${rootKey}" not found.</div>`;
+          return;
+        }
+
+        const appSectionId = generateUniqueId("section_" + rootKey.replace(/[^\w]/g, '_').toLowerCase());
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'accordion-group';
+
+        groupDiv.innerHTML = `
+          <div class="accordion-header">
+            <h5 class="mb-0">
+              <button class="custom-accordion-button" type="button" data-target="#${appSectionId}">
+                ${rootKey}
+              </button>
+            </h5>
+          </div>
+          <div id="${appSectionId}" class="accordion-content">
+            <div class="accordion-body custom-accordion" id="${appSectionId}_body"></div>
+          </div>
+        `;
+
+        parent.appendChild(groupDiv);
+
+        const body = groupDiv.querySelector(`#${appSectionId}_body`);
+
+        function createAccordionGroup(parentEl, label, content, parentId) {
+          const sectionId = generateUniqueId(parentId + "_" + label.replace(/[^\w]/g, '_').toLowerCase());
+          const nestedGroup = document.createElement('div');
+          nestedGroup.className = 'accordion-group';
+
+          nestedGroup.innerHTML = `
+            <div class="accordion-header">
+              <h5 class="mb-0">
+                <button class="custom-accordion-button" type="button" data-target="#${sectionId}">
+                  ${label}
+                </button>
+              </h5>
+            </div>
+            <div id="${sectionId}" class="accordion-content">
+              <div class="accordion-body"></div>
+            </div>
+          `;
+
+          const sectionBody = nestedGroup.querySelector('.accordion-body');
+
+          if (typeof content === 'string') {
+            sectionBody.innerHTML = `<a href="${content}" target="_blank">${label}</a>`;
+          } else if (typeof content === 'object') {
+            Object.entries(content).forEach(([subLabel, subVal]) => {
+              if (typeof subVal === 'string') {
+                const linkItem = document.createElement('div');
+                linkItem.innerHTML = `<a href="${subVal}" target="_blank">${subLabel}</a>`;
+                sectionBody.appendChild(linkItem);
+              } else if (typeof subVal === 'object') {
+                createAccordionGroup(sectionBody, subLabel, subVal, sectionId);
+              }
+            });
+          }
+
+          parentEl.appendChild(nestedGroup);
+        }
+
+        Object.entries(appData).forEach(([section, links]) => {
+          createAccordionGroup(body, section, links, appSectionId);
+        });
+
+        if (typeof initializeAccordionListeners === "function") {
+          initializeAccordionListeners();
+        }
+      })
+      .catch(err => {
+        parent.innerHTML = `<div class="error">Error loading: ${err.message}</div>`;
+      });
+  };
+</script>
